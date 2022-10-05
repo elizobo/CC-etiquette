@@ -1,20 +1,33 @@
-# Final analysis
-
-Data<-read.csv("/Users/Downloads/CC-4-Datavis-master/LPIdata_CC.csv")
-
+# Creating plots of LPI population frequency by biome
+# http://www.livingplanetindex.org/home/index
+# Elizabeth Stroud s1828407@ed.ac.uk
+# 2017_10_12
+ 
+# Libraries ----
 library(tidyr)
-DataFix<-gather(Data,"year","abundance",9:53)
 library(readr)
-DataFix$year <- parse_number(DataFix$year)
-names(DataFix)
-names(DataFix) <- tolower(names(DataFix))
-DataFix$abundance <- as.numeric(DataFix$abundance)
-
 library(dplyr)
+library(ggplot2)
+
+# Import data----
+Data<-read.csv("~/Desktop/Coding/CodingClub/CC-etiquette/LPIdata_CC.csv")
+
+# Format data----
+# make new dataframe with subset of original data
+DataFix <- gather(Data,"year","abundance",9:53)
+# make all numbers - take out X
+DataFix$year <- parse_number(DataFix$year)
+# look at the headers of the new database
+names(DataFix)
+# make all names lower case
+names(DataFix) <- tolower(names(DataFix))
+# convert abundance to numeric rather than character
+DataFix$abundance <- as.numeric(DataFix$abundance)
+# new object with data grouped by biome
 lpiBiomes<- DataFix %>%group_by(biome)%>%summarise(Pop. = n())
 lpiBiomes[1:5,1:2]
 
-library(ggplot2)
+
 ThemeForLPI <- function()
 {
 theme_bw()+
